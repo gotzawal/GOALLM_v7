@@ -26,4 +26,4 @@ Architecture Diagram is below.
 
 ![GOALLM_v7-Server](https://github.com/user-attachments/assets/a26e5a07-3ade-4b5f-8763-b3c30c428e11)
 
-![GOALLM_v7-Client](https://github.com/user-attachments/assets/e319e167-77fd-4048-ad4c-68178e21391a)
+
