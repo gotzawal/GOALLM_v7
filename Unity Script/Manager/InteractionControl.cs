@@ -126,7 +126,7 @@ public class InteractionControl : MonoBehaviour
             item.currentPlace = newPlace;
 
             // 4. 계층 정리(루트로 빼기 — 필요 없다면 삭제 가능)
-            item.itemGameObject.transform.SetParent(null);
+            //item.itemGameObject.transform.SetParent(null);
         }
     }
 
@@ -323,19 +323,24 @@ public class InteractionControl : MonoBehaviour
             return;
         }
 
-        // Add item to Place's inventory
-        currentPlace.Inventory.Add(itemName);
-        item.currentPlace = currentPlace;
-        Debug.Log($"DropItem: Added item '{itemName}' to Place '{currentPlace.Name}' inventory.");
+        if (itemRb != null)
+        {
+            itemRb.isKinematic = false;        // 키네마틱 해제
+            itemRb.useGravity = true;          // 중력 적용
+            itemRb.collisionDetectionMode = CollisionDetectionMode.Continuous; // 충돌 누수를 줄이려면 옵션
+        }
+        if (itemCollider != null)
+        {
+            itemCollider.enabled = true;       // 콜라이더 온
+        }
 
-        // Set item's GameObject position to Place's position, or keep current position if location is unknown
-        item.itemGameObject.transform.position =
-            npcLocation == "unknown"
-                ? item.itemGameObject.transform.position
-                : currentPlace.GameObject.transform.position;
-        Debug.Log(
-            $"DropItem: Set position of item '{itemName}' to Place '{currentPlace.Name}' position."
-        );
+        // ② 드롭 위치를 약간 띄워서 설정 (바닥에 박히지 않도록)
+        Vector3 dropPos;
+        if (npcLocation != "unknown")
+            dropPos = currentPlace.GameObject.transform.position + Vector3.up * 0.5f;
+        else
+            dropPos = item.itemGameObject.transform.position + Vector3.up * 0.5f;
+        item.itemGameObject.transform.position = dropPos;
     }
 
     /// <summary>
